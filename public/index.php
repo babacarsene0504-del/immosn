@@ -10,6 +10,7 @@ $dotenv->load();
 
 use Core\Router;
 use Controller\AuthController;
+use Controller\MemberController;
 
 session_start();
 
@@ -20,5 +21,6 @@ $router->post('/login', [AuthController::class, 'login']);
 $router->get('/register', [AuthController::class, 'showRegister']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/dashboard', [MemberController::class, 'dashboard']);
 
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
