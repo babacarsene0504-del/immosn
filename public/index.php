@@ -25,6 +25,7 @@ use Controller\MemberController;
 use Controller\BienController;
 use Controller\VilleController;
 use Controller\AdminController;
+use Controller\ScannerController;
 
 session_start();
 
@@ -47,4 +48,6 @@ $router->get('/admin', [AdminController::class, 'index']);
 $router->post('/admin/biens/:id/valider', [AdminController::class, 'validate']);
 $router->post('/admin/biens/:id/rejeter', [AdminController::class, 'reject']);
 
+$router->get('/scanner', [ScannerController::class, 'showScanner']);
+$router->get('/scan/:token', [ScannerController::class, 'scan']);
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
