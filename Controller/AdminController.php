@@ -4,6 +4,8 @@ namespace Controller;
 
 use Model\Bien;
 use Core\QrGenerator;
+use Mail\Mailer;
+use Model\User;
 
 class AdminController
 {
@@ -30,7 +32,26 @@ class AdminController
         $baseUrl .= $_SERVER['HTTP_HOST'];
         QrGenerator::generateForBien($id, $baseUrl);
 
-        // Sprint 5 : email de confirmation avec le QR Code en pièce jointe (Mailer)
+        // Email de confirmation au propriétaire, avec le QR Code en pièce jointe
+        $bien = Bien::findById($id);
+        $proprietaire = User::findById($bien['user_id']);
+        $qr = \Model\QrCode::findByBienId($id);
+
+        if ($proprietaire && $qr) {
+            $absoluteQrPath = __DIR__ . '/../public' . $qr['file_path'];
+            Mailer::getInstance()->send(
+                $proprietaire['email'],
+                'Votre bien est en ligne sur ImmoSn.com',
+                'bien_valide',
+                [
+                    'prenom'   => $proprietaire['prenom'],
+                    'titreBien' => $bien['titre'],
+                    'bienUrl'  => $baseUrl . '/biens/' . $id,
+                ],
+                is_file($absoluteQrPath) ? [$absoluteQrPath => 'qrcode-bien.png'] : [],
+                $proprietaire['id']
+            );
+        }
 
         header('Location: /admin');
         exit;
@@ -43,7 +64,28 @@ class AdminController
         $this->checkCsrf();
 
         $motif = trim($_POST['motif_rejet'] ?? '');
+        $bien = Bien::findById($id); // récupéré AVANT updateStatut, pour garder le titre
+
         Bien::updateStatut($id, 'rejete', $motif ?: null);
+
+        $proprietaire = User::findById($bien['user_id']);
+        if ($proprietaire) {
+            $dashboardUrl = ($_SERVER['HTTPS'] ?? '') === 'on' ? 'https://' : 'http://';
+            $dashboardUrl .= $_SERVER['HTTP_HOST'] . '/dashboard';
+
+            Mailer::getInstance()->send(
+                $proprietaire['email'],
+                "Votre annonce ImmoSn.com n'a pas été validée",
+                'bien_rejete',
+                [
+                    'prenom'       => $proprietaire['prenom'],
+                    'titreBien'    => $bien['titre'],
+                    'motif'        => $motif ?: 'Non précisé',
+                    'dashboardUrl' => $dashboardUrl,
+                ],
+                userId: $proprietaire['id']
+            );
+        }
 
         header('Location: /admin');
         exit;

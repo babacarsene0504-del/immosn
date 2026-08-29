@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Model\User;
+use Mail\Mailer;
 
 class AuthController
 {
@@ -50,7 +51,16 @@ class AuthController
             'role'      => $role,
         ]);
 
-        // Sprint 5 : envoi de l'email de bienvenue via Mailer/MailTemplate ici
+        $loginUrl = ($_SERVER['HTTPS'] ?? '') === 'on' ? 'https://' : 'http://';
+        $loginUrl .= $_SERVER['HTTP_HOST'] . '/login';
+
+        Mailer::getInstance()->send(
+            $email,
+            'Bienvenue sur ImmoSn.com',
+            'bienvenue',
+            ['prenom' => $prenom, 'role' => $role, 'loginUrl' => $loginUrl],
+            userId: $userId
+        );
 
         $this->loginUser($userId, $email, $role);
 
