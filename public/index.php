@@ -1,12 +1,23 @@
 <?php
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
+// Sert directement les fichiers statiques réels (images, CSS, JS...) sans
+// passer par le Router — indispensable avec le serveur PHP intégré, qui
+// n'a pas de gestion de fichiers statiques automatique quand un router
+// script est fourni (contrairement à Apache/Nginx en production).
+if (php_sapi_name() === 'cli-server') {
+    $requestedPath = realpath(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    if ($requestedPath !== false && is_file($requestedPath)) {
+        return false;
+    }
+}
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();                       
-
+$dotenv->load();
 
 use Core\Router;
 use Controller\AuthController;

@@ -5,6 +5,8 @@ namespace Controller;
 use Model\Bien;
 use Model\Ville;
 use Model\CategorieBien;
+use Model\QrCode;
+use Model\User;
 
 class BienController
 {
@@ -39,6 +41,8 @@ class BienController
 
         Bien::incrementViews($id);
         $similaires = Bien::getSimilaires($id);
+        $qrCode = QrCode::findByBienId($id);
+        $proprietaire = User::findById($bien['user_id']);
 
         require __DIR__ . '/../View/biens/show.php';
     }
