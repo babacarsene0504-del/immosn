@@ -50,4 +50,6 @@ $router->post('/admin/biens/:id/rejeter', [AdminController::class, 'reject']);
 
 $router->get('/scanner', [ScannerController::class, 'showScanner']);
 $router->get('/scan/:token', [ScannerController::class, 'scan']);
+$router->get('/admin/cron', [AdminController::class, 'cronMonitor']);
+$router->get('/admin/mails', [AdminController::class, 'mailLogs']);
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

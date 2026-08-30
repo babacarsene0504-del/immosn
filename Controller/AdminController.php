@@ -3,6 +3,8 @@
 namespace Controller;
 
 use Model\Bien;
+use Model\CronLog;
+use Model\MailLog;
 use Core\QrGenerator;
 use Mail\Mailer;
 use Model\User;
@@ -89,6 +91,22 @@ class AdminController
 
         header('Location: /admin');
         exit;
+    }
+
+    /** GET /admin/cron — historique des exécutions Cron */
+    public function cronMonitor(): void
+    {
+        $this->requireModerateur();
+        $logs = CronLog::recent(50);
+        require __DIR__ . '/../View/admin/cron_monitor.php';
+    }
+
+    /** GET /admin/mails — historique des emails envoyés */
+    public function mailLogs(): void
+    {
+        $this->requireModerateur();
+        $logs = MailLog::recent(50);
+        require __DIR__ . '/../View/admin/mail_logs.php';
     }
 
     private function requireModerateur(): void

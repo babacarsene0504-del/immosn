@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cron Monitor — ImmoSn.com</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <header style="padding:16px 28px; background:#fff; border-bottom:1px solid #E8DFCF;">
+        <strong style="color:#C2542E;">ImmoSn.com</strong> <span style="color:#7A6F63;"> — Espace modérateur</span>
+    </header>
+
+    <main class="max-w-5xl mx-auto mt-8 p-6">
+        <?php require __DIR__ . '/_nav.php'; ?>
+
+        <h1 class="text-xl font-bold mb-4">Historique des exécutions Cron</h1>
+
+        <table class="w-full text-sm border-collapse">
+            <thead>
+                <tr class="text-left text-gray-500 border-b">
+                    <th class="py-2">Script</th>
+                    <th>Statut</th>
+                    <th>Éléments traités</th>
+                    <th>Durée</th>
+                    <th>Exécuté le</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($logs as $log): ?>
+                    <tr class="border-b">
+                        <td class="py-2 font-mono text-xs"><?= htmlspecialchars($log['script'], ENT_QUOTES, 'UTF-8') ?></td>
+                        <td>
+                            <?php
+                            $badgeClass = match ($log['status']) {
+                                'success' => 'bg-emerald-100 text-emerald-800',
+                                'error'   => 'bg-red-100 text-red-800',
+                                default   => 'bg-gray-100 text-gray-700',
+                            };
+                            ?>
+                            <span class="text-xs px-2 py-0.5 rounded <?= $badgeClass ?>"><?= htmlspecialchars($log['status'], ENT_QUOTES, 'UTF-8') ?></span>
+                        </td>
+                        <td><?= (int)$log['items_processed'] ?></td>
+                        <td><?= $log['duration_ms'] ? (int)$log['duration_ms'] . ' ms' : '—' ?></td>
+                        <td class="text-gray-500"><?= htmlspecialchars($log['executed_at'], ENT_QUOTES, 'UTF-8') ?></td>
+                    </tr>
+                    <?php if (!empty($log['error_message'])): ?>
+                        <tr class="border-b bg-red-50">
+                            <td colspan="5" class="py-1 px-2 text-xs text-red-700"><?= htmlspecialchars($log['error_message'], ENT_QUOTES, 'UTF-8') ?></td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                <?php if (empty($logs)): ?>
+                    <tr><td colspan="5" class="py-4 text-gray-500">Aucune exécution enregistrée pour le moment.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

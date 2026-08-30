@@ -12,6 +12,7 @@
     </header>
 
     <main class="max-w-5xl mx-auto mt-8 p-6">
+        <?php require __DIR__ . '/_nav.php'; ?>
         <h1 class="text-xl font-bold mb-6"><?= count($biensEnAttente) ?> bien(s) en attente de validation</h1>
 
         <?php if (empty($biensEnAttente)): ?>
