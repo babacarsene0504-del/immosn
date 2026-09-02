@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Connexion — ImmoSn.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
 </head>
-<body>
+<body class="font-sans bg-sand-50 text-[#2B2420]">
     <main class="max-w-md mx-auto mt-16 p-6">
-        <h1 class="text-2xl font-bold mb-6">Connexion</h1>
+        <h1 class="font-heading text-2xl font-bold mb-6">Connexion</h1>
 
         <?php if (!empty($_SESSION['errors'])): ?>
             <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
@@ -33,7 +35,7 @@
                        class="w-full border rounded px-3 py-2">
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">
+            <button type="submit" class="w-full bg-primary text-white py-2 rounded">
                 Se connecter
             </button>
         </form>

@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Cron Monitor — ImmoSn.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
 </head>
-<body>
+<body class="font-sans bg-sand-50 text-[#2B2420]">
     <header style="padding:16px 28px; background:#fff; border-bottom:1px solid #E8DFCF;">
         <strong style="color:#C2542E;">ImmoSn.com</strong> <span style="color:#7A6F63;"> — Espace modérateur</span>
     </header>
 
-    <main class="max-w-5xl mx-auto mt-8 p-6">
+    <main class="max-w-5xl mx-auto mt-8 p-4 sm:p-6">
         <?php require __DIR__ . '/_nav.php'; ?>
 
-        <h1 class="text-xl font-bold mb-4">Historique des exécutions Cron</h1>
+        <h1 class="font-heading text-xl font-bold mb-4">Historique des exécutions Cron</h1>
 
-        <table class="w-full text-sm border-collapse">
+        <div class="overflow-x-auto"><table class="w-full text-sm border-collapse min-w-[600px]">
             <thead>
                 <tr class="text-left text-gray-500 border-b">
                     <th class="py-2">Script</th>
@@ -32,7 +34,7 @@
                         <td>
                             <?php
                             $badgeClass = match ($log['status']) {
-                                'success' => 'bg-emerald-100 text-emerald-800',
+                                'success' => 'bg-secondary/10 text-secondary-dark',
                                 'error'   => 'bg-red-100 text-red-800',
                                 default   => 'bg-gray-100 text-gray-700',
                             };
@@ -54,7 +56,7 @@
                     <tr><td colspan="5" class="py-4 text-gray-500">Aucune exécution enregistrée pour le moment.</td></tr>
                 <?php endif; ?>
             </tbody>
-        </table>
+        </table></div>
     </main>
 </body>
 </html>

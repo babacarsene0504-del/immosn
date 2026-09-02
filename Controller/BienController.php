@@ -7,6 +7,7 @@ use Model\Ville;
 use Model\CategorieBien;
 use Model\QrCode;
 use Model\User;
+use Model\Favori;
 
 class BienController
 {
@@ -43,6 +44,7 @@ class BienController
         $similaires = Bien::getSimilaires($id);
         $qrCode = QrCode::findByBienId($id);
         $proprietaire = User::findById($bien['user_id']);
+        $isFavori = !empty($_SESSION['user_id']) && Favori::exists($_SESSION['user_id'], $id);
 
         require __DIR__ . '/../View/biens/show.php';
     }

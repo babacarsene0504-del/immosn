@@ -1,4 +1,4 @@
-<nav class="flex gap-4 border-b mb-6 text-sm">
+<nav class="flex gap-4 border-b mb-6 text-sm overflow-x-auto whitespace-nowrap">
     <a href="/admin" class="py-2 border-b-2 <?= ($_SERVER['REQUEST_URI'] === '/admin') ? 'border-orange-600 text-orange-600 font-medium' : 'border-transparent text-gray-500' ?>">
         Biens à valider
     </a>

@@ -26,6 +26,7 @@ use Controller\BienController;
 use Controller\VilleController;
 use Controller\AdminController;
 use Controller\ScannerController;
+use Controller\FavoriController;
 
 session_start();
 
@@ -52,4 +53,8 @@ $router->get('/scanner', [ScannerController::class, 'showScanner']);
 $router->get('/scan/:token', [ScannerController::class, 'scan']);
 $router->get('/admin/cron', [AdminController::class, 'cronMonitor']);
 $router->get('/admin/mails', [AdminController::class, 'mailLogs']);
+
+
+$router->post('/favoris/:id/toggle', [FavoriController::class, 'toggle']);
+$router->get('/favoris', [FavoriController::class, 'index']);
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

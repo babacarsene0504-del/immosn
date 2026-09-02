@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Model\User;
+use Model\Bien;
 
 class MemberController
 {
@@ -12,6 +13,7 @@ class MemberController
         $this->requireAuth();
 
         $user = User::findById($_SESSION['user_id']);
+        $mesBiens = Bien::getByUser($_SESSION['user_id']);
 
         require __DIR__ . '/../View/member/dashboard.php';
     }

@@ -11,7 +11,7 @@
         <strong style="color:#C2542E;">ImmoSn.com</strong>
     </header>
 
-    <main class="max-w-2xl mx-auto mt-10 p-6">
+    <main class="max-w-2xl mx-auto mt-10 p-4 sm:p-6">
         <h1 class="text-2xl font-bold mb-6">Publier un bien</h1>
 
         <?php if (!empty($_SESSION['errors'])): ?>
@@ -35,7 +35,7 @@
                 <textarea name="description" rows="4" required class="w-full border rounded px-3 py-2"></textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block mb-1">Type d'offre</label>
                     <select name="type_offre" required class="w-full border rounded px-3 py-2">
@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block mb-1">Région</label>
                     <select id="region" class="w-full border rounded px-3 py-2">
@@ -77,7 +77,7 @@
                 </select>
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                     <label class="block mb-1">Superficie (m²)</label>
                     <input type="number" name="superficie" min="0" required class="w-full border rounded px-3 py-2">

@@ -11,8 +11,7 @@
         <strong style="color:#C2542E;">ImmoSn.com</strong> <span style="color:#7A6F63;"> — Espace modérateur</span>
     </header>
 
-    <main class="max-w-5xl mx-auto mt-8 p-6">
-        <?php require __DIR__ . '/_nav.php'; ?>
+    <main class="max-w-5xl mx-auto mt-8 p-4 sm:p-6">
         <h1 class="text-xl font-bold mb-6"><?= count($biensEnAttente) ?> bien(s) en attente de validation</h1>
 
         <?php if (empty($biensEnAttente)): ?>
@@ -21,7 +20,7 @@
 
         <?php foreach ($biensEnAttente as $bien): ?>
             <div class="border rounded p-4 mb-4">
-                <div class="flex justify-between items-start">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                     <div>
                         <p class="font-semibold"><?= htmlspecialchars($bien['titre'], ENT_QUOTES, 'UTF-8') ?></p>
                         <p class="text-sm text-gray-500">
@@ -33,7 +32,7 @@
                         <p class="text-sm mt-2"><?= htmlspecialchars($bien['description'], ENT_QUOTES, 'UTF-8') ?></p>
                     </div>
 
-                    <div class="flex gap-2 shrink-0 ml-4">
+                    <div class="flex gap-2 shrink-0 sm:ml-4">
                         <form method="POST" action="/admin/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/valider">
                             <?= csrf_field() ?>
                             <button type="submit" class="bg-emerald-700 text-white px-3 py-1.5 rounded text-sm">Valider</button>
