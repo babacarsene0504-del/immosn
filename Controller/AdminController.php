@@ -4,6 +4,8 @@ namespace Controller;
 
 use Model\Bien;
 use Model\CronLog;
+use Model\Alerte;
+use Model\AlerteLog;
 use Model\MailLog;
 use Core\QrGenerator;
 use Mail\Mailer;
@@ -33,6 +35,37 @@ class AdminController
         $baseUrl = ($_SERVER['HTTPS'] ?? '') === 'on' ? 'https://' : 'http://';
         $baseUrl .= $_SERVER['HTTP_HOST'];
         QrGenerator::generateForBien($id, $baseUrl);
+
+        // Notifie les utilisateurs dont une alerte active correspond à ce bien
+        $bienPourAlertes = Bien::findById($id);
+        $alertesCorrespondantes = Alerte::getMatchingForBien(
+            $id,
+            $bienPourAlertes['category_id'],
+            $bienPourAlertes['ville_id'],
+            (float) $bienPourAlertes['prix']
+        );
+
+        foreach ($alertesCorrespondantes as $alerte) {
+            $abonne = User::findById($alerte['user_id']);
+            if (!$abonne) {
+                continue;
+            }
+
+            Mailer::getInstance()->send(
+                $abonne['email'],
+                'Un bien correspond à votre alerte ImmoSn.com',
+                'alerte_nouveau_bien',
+                [
+                    'prenom'        => $abonne['prenom'],
+                    'titreBien'     => $bienPourAlertes['titre'],
+                    'prixFormatte'  => number_format($bienPourAlertes['prix'], 0, ',', ' '),
+                    'bienUrl'       => $baseUrl . '/biens/' . $id,
+                ],
+                userId: $abonne['id']
+            );
+
+            AlerteLog::create($alerte['id'], $id, $abonne['id']);
+        }
 
         // Email de confirmation au propriétaire, avec le QR Code en pièce jointe
         $bien = Bien::findById($id);

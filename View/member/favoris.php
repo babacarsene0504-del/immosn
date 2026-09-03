@@ -13,8 +13,8 @@
             </div>
             <nav class="px-3 space-y-1 text-sm">
                 <a href="/dashboard" class="block px-3 py-2 rounded text-gray-300">Mes biens</a>
-                <a href="#" class="block px-3 py-2 rounded text-gray-300">Messagerie</a>
-                <a href="#" class="block px-3 py-2 rounded text-gray-300">Alertes</a>
+                <a href="/messagerie" class="block px-3 py-2 rounded text-gray-300">Messagerie</a>
+                <a href="/alertes" class="block px-3 py-2 rounded text-gray-300">Alertes</a>
                 <a href="/favoris" class="block px-3 py-2 rounded bg-secondary/25">Favoris</a>
                 <a href="/logout" class="block px-3 py-2 rounded text-gray-300 mt-6">Déconnexion</a>
             </nav>

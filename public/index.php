@@ -27,6 +27,8 @@ use Controller\VilleController;
 use Controller\AdminController;
 use Controller\ScannerController;
 use Controller\FavoriController;
+use Controller\AlerteController;
+use Controller\MessageController;
 
 session_start();
 
@@ -57,4 +59,14 @@ $router->get('/admin/mails', [AdminController::class, 'mailLogs']);
 
 $router->post('/favoris/:id/toggle', [FavoriController::class, 'toggle']);
 $router->get('/favoris', [FavoriController::class, 'index']);
+
+$router->get('/alertes', [AlerteController::class, 'index']);
+$router->post('/alertes', [AlerteController::class, 'store']);
+$router->post('/alertes/:id/toggle', [AlerteController::class, 'toggle']);
+
+$router->get('/messagerie', [MessageController::class, 'index']);
+$router->get('/messagerie/:userId', [MessageController::class, 'thread']);
+$router->post('/messagerie/:userId', [MessageController::class, 'reply']);
+$router->get('/biens/:id/contacter', [MessageController::class, 'contactForm']);
+$router->post('/biens/:id/contacter', [MessageController::class, 'contactSend']);
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

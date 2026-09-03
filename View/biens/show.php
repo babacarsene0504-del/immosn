@@ -80,9 +80,10 @@
                     <p class="text-xs text-gray-500 mb-3">
                         <?= $proprietaire['role'] === 'agence' ? 'Agence' : 'Particulier' ?>
                     </p>
-                    <button class="w-full bg-primary text-white py-2 rounded text-sm mb-2">
+                    <a href="/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/contacter"
+                       class="block text-center w-full bg-primary text-white py-2 rounded text-sm mb-2">
                         Contacter le propriétaire
-                    </button>
+                    </a>
                     <?php if (!empty($_SESSION['user_id'])): ?>
                         <form method="POST" action="/favoris/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/toggle">
                             <?php require_once __DIR__ . '/../../Core/csrf_helper.php'; echo csrf_field(); ?>
