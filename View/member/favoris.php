@@ -33,7 +33,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <?php foreach ($favoris as $bien): ?>
                     <a href="/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>" class="border rounded overflow-hidden block hover:shadow">
-                        <div class="h-32 bg-sand-100"></div>
+                        <?php if (!empty($bien['photo_principale'])): ?>
+                            <img src="<?= htmlspecialchars($bien['photo_principale'], ENT_QUOTES, 'UTF-8') ?>" alt="" class="h-32 w-full object-cover">
+                        <?php else: ?>
+                            <div class="h-32 bg-sand-100"></div>
+                        <?php endif; ?>
                         <div class="p-3">
                             <p class="text-xs inline-block px-2 py-0.5 rounded bg-secondary/10 text-secondary-dark">
                                 <?= $bien['type_offre'] === 'location' ? 'Location' : 'Vente' ?>

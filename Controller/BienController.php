@@ -8,6 +8,8 @@ use Model\CategorieBien;
 use Model\QrCode;
 use Model\User;
 use Model\Favori;
+use Model\Photo;
+use Core\Uploader;
 
 class BienController
 {
@@ -45,6 +47,7 @@ class BienController
         $qrCode = QrCode::findByBienId($id);
         $proprietaire = User::findById($bien['user_id']);
         $isFavori = !empty($_SESSION['user_id']) && Favori::exists($_SESSION['user_id'], $id);
+        $photos = Photo::getByBien($id);
 
         require __DIR__ . '/../View/biens/show.php';
     }
@@ -77,7 +80,7 @@ class BienController
         // Chaque bien expire 90 jours après sa publication — colonne NOT NULL en base
         $expireAt = date('Y-m-d H:i:s', strtotime('+90 days'));
 
-        Bien::create([
+        $id = Bien::create([
             'user_id'        => $_SESSION['user_id'],
             'category_id'    => $_POST['category_id'],
             'ville_id'       => $_POST['ville_id'],
@@ -92,11 +95,46 @@ class BienController
             'expire_at'      => $expireAt,
         ]);
 
-        // NOTE Sprint suivant : upload des photos (table `photos`) et génération
-        // du QR Code n'interviennent qu'après validation par un modérateur — pas ici.
+        $this->handlePhotoUploads($id);
+
+        // La génération du QR Code intervient après validation par un modérateur (AdminController::validate)
 
         header('Location: /dashboard');
         exit;
+    }
+
+    /** Traite jusqu'à 10 photos envoyées avec le formulaire ; la première devient la photo principale */
+    private function handlePhotoUploads(string $bienId): void
+    {
+        if (empty($_FILES['photos']['name'][0])) {
+            return;
+        }
+
+        $destDir = __DIR__ . '/../public/storage/photos/' . $bienId;
+        $count = min(count($_FILES['photos']['name']), 10);
+
+        for ($i = 0; $i < $count; $i++) {
+            if ($_FILES['photos']['error'][$i] !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $file = [
+                'name'     => $_FILES['photos']['name'][$i],
+                'type'     => $_FILES['photos']['type'][$i],
+                'tmp_name' => $_FILES['photos']['tmp_name'][$i],
+                'error'    => $_FILES['photos']['error'][$i],
+                'size'     => $_FILES['photos']['size'][$i],
+            ];
+
+            try {
+                $filename = Uploader::upload($file, $destDir);
+                Photo::create($bienId, '/storage/photos/' . $bienId . '/' . $filename, $i === 0);
+            } catch (\RuntimeException $e) {
+                // Une photo invalide (format/taille) n'empêche pas la publication du bien,
+                // on l'ignore simplement plutôt que de bloquer tout le formulaire.
+                continue;
+            }
+        }
     }
 
     private function validate(array $data): array

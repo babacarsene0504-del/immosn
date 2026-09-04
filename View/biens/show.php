@@ -15,7 +15,25 @@
     <main class="max-w-5xl mx-auto mt-8 p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div class="lg:col-span-2">
-            <div class="h-64 bg-sand-100 rounded mb-4"></div>
+            <?php if (!empty($photos)): ?>
+                <img src="<?= htmlspecialchars($photos[0]['file_path'], ENT_QUOTES, 'UTF-8') ?>"
+                     alt="<?= htmlspecialchars($bien['titre'], ENT_QUOTES, 'UTF-8') ?>"
+                     class="w-full h-64 object-cover rounded mb-3">
+                <?php if (count($photos) > 1): ?>
+                    <div class="grid grid-cols-4 gap-2 mb-4">
+                        <?php foreach (array_slice($photos, 1, 4) as $photo): ?>
+                            <img src="<?= htmlspecialchars($photo['file_path'], ENT_QUOTES, 'UTF-8') ?>"
+                                 alt="" class="w-full h-20 object-cover rounded">
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="mb-4"></div>
+                <?php endif; ?>
+            <?php else: ?>
+                <div class="h-64 bg-sand-100 rounded mb-4 flex items-center justify-center text-gray-400 text-sm">
+                    Aucune photo
+                </div>
+            <?php endif; ?>
 
             <div class="flex flex-col sm:flex-row sm:justify-between items-start gap-2">
                 <div>

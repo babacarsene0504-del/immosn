@@ -52,7 +52,12 @@
                     };
                     ?>
                     <div class="border rounded p-4 flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div class="w-full sm:w-24 h-24 bg-sand-100 rounded shrink-0"></div>
+                        <?php if (!empty($bien['photo_principale'])): ?>
+                            <img src="<?= htmlspecialchars($bien['photo_principale'], ENT_QUOTES, 'UTF-8') ?>" alt=""
+                                 class="w-full sm:w-24 h-24 rounded shrink-0 object-cover">
+                        <?php else: ?>
+                            <div class="w-full sm:w-24 h-24 bg-sand-100 rounded shrink-0"></div>
+                        <?php endif; ?>
 
                         <div class="flex-1">
                             <span class="text-xs px-2 py-0.5 rounded <?= $badge[0] ?>"><?= htmlspecialchars($badge[1], ENT_QUOTES, 'UTF-8') ?></span>

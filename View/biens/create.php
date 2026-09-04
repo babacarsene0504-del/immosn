@@ -4,15 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Publier un bien — ImmoSn.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
 </head>
-<body>
+<body class="font-sans bg-sand-50 text-[#2B2420]">
     <header style="padding:16px 28px; background:#fff; border-bottom:1px solid #E8DFCF;">
         <strong style="color:#C2542E;">ImmoSn.com</strong>
     </header>
 
     <main class="max-w-2xl mx-auto mt-10 p-4 sm:p-6">
-        <h1 class="text-2xl font-bold mb-6">Publier un bien</h1>
+        <h1 class="font-heading text-2xl font-bold mb-6">Publier un bien</h1>
 
         <?php if (!empty($_SESSION['errors'])): ?>
             <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
@@ -22,7 +24,7 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="/publier" class="space-y-4">
+        <form method="POST" action="/publier" enctype="multipart/form-data" class="space-y-4">
             <?= csrf_field() ?>
 
             <div>
@@ -92,11 +94,18 @@
                 </div>
             </div>
 
+            <div>
+                <label class="block mb-1">Photos (10 maximum)</label>
+                <input type="file" name="photos[]" multiple accept="image/jpeg,image/png,image/webp"
+                       class="w-full border rounded px-3 py-2">
+                <p class="text-xs text-gray-500 mt-1">JPEG, PNG ou WebP — 3 Mo maximum par photo. La première photo sera utilisée comme image principale.</p>
+            </div>
+
             <p class="text-sm text-gray-500">
-                L'upload des photos et la génération du QR Code arriveront après validation par un modérateur (Sprint 3).
+                La génération du QR Code interviendra après validation par un modérateur.
             </p>
 
-            <button type="submit" class="w-full bg-orange-600 text-white py-2 rounded">
+            <button type="submit" class="w-full bg-primary text-white py-2 rounded">
                 Publier le bien
             </button>
         </form>

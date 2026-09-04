@@ -29,6 +29,9 @@ use Controller\ScannerController;
 use Controller\FavoriController;
 use Controller\AlerteController;
 use Controller\MessageController;
+use Controller\HomeController;
+
+
 
 session_start();
 
@@ -69,4 +72,5 @@ $router->get('/messagerie/:userId', [MessageController::class, 'thread']);
 $router->post('/messagerie/:userId', [MessageController::class, 'reply']);
 $router->get('/biens/:id/contacter', [MessageController::class, 'contactForm']);
 $router->post('/biens/:id/contacter', [MessageController::class, 'contactSend']);
+$router->get('/', [HomeController::class, 'index']);
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

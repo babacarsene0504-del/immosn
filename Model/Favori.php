@@ -36,11 +36,12 @@ class Favori
     public static function getByUser(string $userId): array
     {
         $stmt = Database::getInstance()->query(
-            'SELECT b.*, c.libelle AS categorie_libelle, v.ville AS ville_nom
+            'SELECT b.*, c.libelle AS categorie_libelle, v.ville AS ville_nom, p.file_path AS photo_principale
              FROM favoris f
              JOIN biens b ON b.id = f.bien_id
              LEFT JOIN categories_biens c ON c.id = b.category_id
              LEFT JOIN villes v ON v.id = b.ville_id
+             LEFT JOIN photos p ON p.bien_id = b.id AND p.is_principal = true
              WHERE f.user_id = ?
              ORDER BY f.created_at DESC',
             [$userId]
