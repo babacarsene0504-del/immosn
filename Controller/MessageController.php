@@ -41,8 +41,14 @@ class MessageController
         $this->checkCsrf();
 
         $contenu = trim($_POST['contenu'] ?? '');
-        if ($contenu !== '') {
-            Message::create(null, $_SESSION['user_id'], $otherUserId, 'Re: conversation', $contenu);
+        $bienId = Message::getLastBienId($_SESSION['user_id'], $otherUserId);
+
+        if ($contenu !== '' && $bienId) {
+            Message::create($bienId, $_SESSION['user_id'], $otherUserId, 'Re: conversation', $contenu);
+        } elseif ($contenu !== '' && !$bienId) {
+            // bien_id est obligatoire en base : une conversation ne peut démarrer
+            // que depuis la fiche d'un bien (bouton "Contacter le propriétaire").
+            $_SESSION['errors'] = ['message' => "Impossible de démarrer une conversation ici — contactez d'abord ce propriétaire depuis la fiche d'un bien."];
         }
 
         header('Location: /messagerie/' . $otherUserId);

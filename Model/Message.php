@@ -52,6 +52,20 @@ class Message
         return $stmt->fetchAll();
     }
 
+    /** Récupère le bien_id du fil de discussion existant, pour les réponses (bien_id est NOT NULL en base) */
+    public static function getLastBienId(string $userId, string $otherUserId): ?string
+    {
+        $stmt = Database::getInstance()->query(
+            'SELECT bien_id FROM messages
+             WHERE (expediteur_id = ? AND destinataire_id = ?)
+                OR (expediteur_id = ? AND destinataire_id = ?)
+             ORDER BY created_at DESC LIMIT 1',
+            [$userId, $otherUserId, $otherUserId, $userId]
+        );
+        $row = $stmt->fetch();
+        return $row['bien_id'] ?? null;
+    }
+
     public static function markThreadRead(string $userId, string $otherUserId): void
     {
         Database::getInstance()->query(
@@ -59,4 +73,5 @@ class Message
             [$userId, $otherUserId]
         );
     }
+
 }
