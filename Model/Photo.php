@@ -10,7 +10,9 @@ class Photo
     {
         Database::getInstance()->query(
             'INSERT INTO photos (bien_id, file_path, is_principal) VALUES (?, ?, ?)',
-            [$bienId, $filePath, $isPrincipal]
+            // PDO pgsql convertit un booléen PHP `false` en chaîne vide '' au lieu de '0',
+            // que PostgreSQL rejette pour une colonne boolean — on force un entier à la place.
+            [$bienId, $filePath, $isPrincipal ? 1 : 0]
         );
     }
 

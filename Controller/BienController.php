@@ -129,9 +129,8 @@ class BienController
             try {
                 $filename = Uploader::upload($file, $destDir);
                 Photo::create($bienId, '/storage/photos/' . $bienId . '/' . $filename, $i === 0);
-            } catch (\RuntimeException $e) {
-                // Une photo invalide (format/taille) n'empêche pas la publication du bien,
-                // on l'ignore simplement plutôt que de bloquer tout le formulaire.
+            } catch (\Throwable $e) {
+                error_log('Upload photo #' . $i . ' échoué : ' . $e->getMessage());
                 continue;
             }
         }

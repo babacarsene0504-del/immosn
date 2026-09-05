@@ -35,7 +35,8 @@ class Alerte
     {
         Database::getInstance()->query(
             'UPDATE alertes SET is_active = ? WHERE id = ? AND user_id = ?',
-            [$active, $id, $userId]
+            // Même correctif que Photo::create : false → '' est rejeté par PostgreSQL via PDO.
+            [$active ? 1 : 0, $id, $userId]
         );
     }
 
