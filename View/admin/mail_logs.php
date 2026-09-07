@@ -52,6 +52,7 @@
                 <?php endif; ?>
             </tbody>
         </table></div>
-    </main>
+        </main>
+    </div>
 </body>
 </html>

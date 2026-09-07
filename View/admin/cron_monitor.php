@@ -8,14 +8,11 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body class="font-sans bg-sand-50 text-[#2B2420]">
-    <header style="padding:16px 28px; background:#fff; border-bottom:1px solid #E8DFCF;">
-        <strong style="color:#C2542E;">ImmoSn.com</strong> <span style="color:#7A6F63;"> — Espace modérateur</span>
-    </header>
+    <div class="flex min-h-screen">
+        <?php require __DIR__ . '/_sidebar.php'; ?>
 
-    <main class="max-w-5xl mx-auto mt-8 p-4 sm:p-6">
-        <?php require __DIR__ . '/_nav.php'; ?>
-
-        <h1 class="font-heading text-xl font-bold mb-4">Historique des exécutions Cron</h1>
+        <main class="flex-1 p-4 sm:p-8">
+            <h1 class="font-heading text-xl font-bold mb-6">Historique des exécutions Cron</h1>
 
         <div class="overflow-x-auto"><table class="w-full text-sm border-collapse min-w-[600px]">
             <thead>
@@ -57,6 +54,7 @@
                 <?php endif; ?>
             </tbody>
         </table></div>
-    </main>
+        </main>
+    </div>
 </body>
 </html>

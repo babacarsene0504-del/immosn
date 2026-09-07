@@ -21,6 +21,15 @@ class MailLog
         );
     }
 
+
+    public static function countLast24h(): int
+    {
+        $stmt = Database::getInstance()->query(
+            "SELECT COUNT(*) FROM mail_logs WHERE sent_at >= NOW() - INTERVAL '24 hours'"
+        );
+        return (int) $stmt->fetchColumn();
+    }
+
     public static function recent(int $limit = 50): array
     {
         $stmt = Database::getInstance()->query(

@@ -3,54 +3,74 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Admin — Biens à valider — ImmoSn.com</title>
+    <title>Dashboard admin — ImmoSn.com</title>
     <link rel="stylesheet" href="/css/app.css">
 </head>
-<body>
-    <header style="padding:16px 28px; background:#fff; border-bottom:1px solid #E8DFCF;">
-        <strong style="color:#C2542E;">ImmoSn.com</strong> <span style="color:#7A6F63;"> — Espace modérateur</span>
-    </header>
+<body class="font-sans bg-sand-50 text-[#2B2420]">
+    <div class="flex min-h-screen">
+        <?php require __DIR__ . '/_sidebar.php'; ?>
 
-    <main class="max-w-5xl mx-auto mt-8 p-4 sm:p-6">
-        <h1 class="text-xl font-bold mb-6"><?= count($biensEnAttente) ?> bien(s) en attente de validation</h1>
+        <main class="flex-1 p-4 sm:p-8">
+            <h1 class="text-xl font-bold mb-6">Tableau de bord</h1>
 
-        <?php if (empty($biensEnAttente)): ?>
-            <p class="text-gray-500">Aucun bien en attente pour le moment.</p>
-        <?php endif; ?>
-
-        <?php foreach ($biensEnAttente as $bien): ?>
-            <div class="border rounded p-4 mb-4">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
-                    <div>
-                        <p class="font-semibold"><?= htmlspecialchars($bien['titre'], ENT_QUOTES, 'UTF-8') ?></p>
-                        <p class="text-sm text-gray-500">
-                            <?= htmlspecialchars($bien['prenom'] . ' ' . $bien['nom'], ENT_QUOTES, 'UTF-8') ?>
-                            · <?= htmlspecialchars($bien['ville_nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>
-                            · <?= htmlspecialchars($bien['categorie_libelle'] ?? '', ENT_QUOTES, 'UTF-8') ?>
-                            · <?= number_format($bien['prix'], 0, ',', ' ') ?> FCFA
-                        </p>
-                        <p class="text-sm mt-2"><?= htmlspecialchars($bien['description'], ENT_QUOTES, 'UTF-8') ?></p>
-                    </div>
-
-                    <div class="flex gap-2 shrink-0 sm:ml-4">
-                        <form method="POST" action="/admin/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/valider">
-                            <?= csrf_field() ?>
-                            <button type="submit" class="bg-emerald-700 text-white px-3 py-1.5 rounded text-sm">Valider</button>
-                        </form>
-
-                        <button type="button" onclick="document.getElementById('rejet-<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>').classList.toggle('hidden')"
-                                class="bg-red-100 text-red-800 px-3 py-1.5 rounded text-sm">Rejeter</button>
-                    </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white border rounded-xl p-4">
+                    <p class="text-xs text-gray-500 mb-1">Biens en attente</p>
+                    <p class="text-2xl font-bold text-primary"><?= $stats['en_attente'] ?></p>
                 </div>
-
-                <form method="POST" action="/admin/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/rejeter"
-                      id="rejet-<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>" class="hidden mt-3 flex gap-2">
-                    <?= csrf_field() ?>
-                    <input type="text" name="motif_rejet" placeholder="Motif du rejet" required class="border rounded px-2 py-1 text-sm flex-1">
-                    <button type="submit" class="bg-red-700 text-white px-3 py-1.5 rounded text-sm">Confirmer le rejet</button>
-                </form>
+                <div class="bg-white border rounded-xl p-4">
+                    <p class="text-xs text-gray-500 mb-1">Biens actifs</p>
+                    <p class="text-2xl font-bold text-secondary"><?= $stats['actifs'] ?></p>
+                </div>
+                <div class="bg-white border rounded-xl p-4">
+                    <p class="text-xs text-gray-500 mb-1">Cron aujourd'hui</p>
+                    <p class="text-2xl font-bold"><?= $stats['cron_today'] ?></p>
+                </div>
+                <div class="bg-white border rounded-xl p-4">
+                    <p class="text-xs text-gray-500 mb-1">Emails envoyés (24h)</p>
+                    <p class="text-2xl font-bold"><?= $stats['mails_24h'] ?></p>
+                </div>
             </div>
-        <?php endforeach; ?>
-    </main>
+
+            <div class="bg-white border rounded-xl p-4 sm:p-6">
+                <h2 class="font-bold mb-4">Biens en attente de validation (<?= count($biensEnAttente) ?>)</h2>
+
+                <?php if (empty($biensEnAttente)): ?>
+                    <p class="text-gray-500 text-sm">Aucun bien en attente pour le moment.</p>
+                <?php endif; ?>
+
+                <?php foreach ($biensEnAttente as $bien): ?>
+                    <div class="border-t py-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                        <div>
+                            <p class="font-semibold"><?= htmlspecialchars($bien['titre'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <p class="text-sm text-gray-500">
+                                <?= htmlspecialchars($bien['prenom'] . ' ' . $bien['nom'], ENT_QUOTES, 'UTF-8') ?>
+                                · <?= htmlspecialchars($bien['ville_nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                                · <?= htmlspecialchars($bien['categorie_libelle'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                                · <?= number_format($bien['prix'], 0, ',', ' ') ?> FCFA
+                            </p>
+                            <p class="text-sm mt-2 text-gray-700"><?= htmlspecialchars($bien['description'], ENT_QUOTES, 'UTF-8') ?></p>
+                        </div>
+
+                        <div class="flex gap-2 shrink-0">
+                            <form method="POST" action="/admin/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/valider">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="bg-secondary text-white px-3 py-1.5 rounded text-sm">Valider</button>
+                            </form>
+                            <button type="button" onclick="document.getElementById('rejet-<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>').classList.toggle('hidden')"
+                                    class="bg-red-100 text-red-800 px-3 py-1.5 rounded text-sm">Rejeter</button>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="/admin/biens/<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>/rejeter"
+                          id="rejet-<?= htmlspecialchars($bien['id'], ENT_QUOTES, 'UTF-8') ?>" class="hidden pb-4 flex gap-2">
+                        <?= csrf_field() ?>
+                        <input type="text" name="motif_rejet" placeholder="Motif du rejet" required class="border rounded px-2 py-1 text-sm flex-1">
+                        <button type="submit" class="bg-red-700 text-white px-3 py-1.5 rounded text-sm">Confirmer le rejet</button>
+                    </form>
+                <?php endforeach; ?>
+            </div>
+        </main>
+    </div>
 </body>
 </html>

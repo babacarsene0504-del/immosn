@@ -20,6 +20,16 @@ class CronLog
         );
     }
 
+    /** Nombre d'exécutions réussies aujourd'hui / total du jour, pour la carte "Cron aujourd'hui" */
+   public static function countToday(): int
+{
+    $stmt = Database::getInstance()->query(
+        "SELECT COUNT(*) FROM cron_logs WHERE executed_at::date = CURRENT_DATE"
+    );
+    return (int) $stmt->fetchColumn();
+}
+
+
     public static function recent(int $limit = 50): array
     {
         $stmt = Database::getInstance()->query(

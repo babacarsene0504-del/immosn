@@ -14,14 +14,21 @@ use Model\User;
 class AdminController
 {
     /** GET /admin — liste des biens en attente de validation */
-    public function index(): void
-    {
-        $this->requireModerateur();
+   public function index(): void
+{
+    $this->requireModerateur();
 
-        $biensEnAttente = Bien::getByStatut('en_attente');
+    $biensEnAttente = Bien::getByStatut('en_attente');
 
-        require __DIR__ . '/../View/admin/dashboard.php';
-    }
+    $stats = [
+        'en_attente' => count($biensEnAttente),
+        'actifs'     => Bien::countByStatut('actif'),
+        'cron_today' => CronLog::countToday(),
+        'mails_24h'  => MailLog::countLast24h(),
+    ];
+
+    require __DIR__ . '/../View/admin/dashboard.php';
+}
 
     /** POST /admin/biens/:id/valider */
     public function validate(string $id): void

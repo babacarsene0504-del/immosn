@@ -193,6 +193,14 @@ class Bien
         return $stmt->fetchAll();
     }
 
+    public static function countByStatut(string $statut): int
+    {
+        $stmt = Database::getInstance()->query('SELECT COUNT(*) FROM biens WHERE statut = ?', [$statut]);
+        return (int) $stmt->fetchColumn();
+    }
+
+  
+
     public static function delete(string $id): void
     {
         Database::getInstance()->query('DELETE FROM biens WHERE id = ?', [$id]);
