@@ -8,18 +8,7 @@
 </head>
 <body class="font-sans bg-sand-50 text-[#2B2420]">
     <div class="flex min-h-screen">
-        <aside class="w-56 bg-[#2B2420] text-white shrink-0">
-            <div class="p-6">
-                <p class="text-lg font-semibold">ImmoSn<span class="text-secondary">.com</span></p>
-            </div>
-            <nav class="px-3 space-y-1 text-sm">
-                <a href="/dashboard" class="block px-3 py-2 rounded text-gray-300">Mes biens</a>
-                <a href="/messagerie" class="block px-3 py-2 rounded text-gray-300">Messagerie</a>
-                <a href="/alertes" class="block px-3 py-2 rounded bg-secondary/25">Alertes</a>
-                <a href="/favoris" class="block px-3 py-2 rounded text-gray-300">Favoris</a>
-                <a href="/logout" class="block px-3 py-2 rounded text-gray-300 mt-6">Déconnexion</a>
-            </nav>
-        </aside>
+        <?php require __DIR__ . '/_sidebar.php'; ?>
 
         <main class="flex-1 p-4 sm:p-8">
             <h1 class="text-xl font-bold mb-6">Mes alertes</h1>

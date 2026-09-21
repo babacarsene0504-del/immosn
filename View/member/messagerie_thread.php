@@ -8,21 +8,19 @@
 </head>
 <body class="font-sans bg-sand-50 text-[#2B2420]">
     <div class="flex min-h-screen">
-        <aside class="w-56 bg-[#2B2420] text-white shrink-0 hidden sm:block">
-            <div class="p-6">
-                <p class="text-lg font-semibold">ImmoSn<span class="text-secondary">.com</span></p>
-            </div>
-            <nav class="px-3 space-y-1 text-sm">
-                <a href="/dashboard" class="block px-3 py-2 rounded text-gray-300">Mes biens</a>
-                <a href="/messagerie" class="block px-3 py-2 rounded bg-secondary/25">Messagerie</a>
-                <a href="/alertes" class="block px-3 py-2 rounded text-gray-300">Alertes</a>
-                <a href="/favoris" class="block px-3 py-2 rounded text-gray-300">Favoris</a>
-            </nav>
-        </aside>
+        <?php require __DIR__ . '/_sidebar.php'; ?>
 
         <main class="flex-1 flex flex-col p-4 sm:p-8">
             <a href="/messagerie" class="text-sm text-primary mb-4">← Retour aux conversations</a>
             <h1 class="text-lg font-bold mb-4"><?= htmlspecialchars($autre['prenom'] . ' ' . $autre['nom'], ENT_QUOTES, 'UTF-8') ?></h1>
+
+            <?php if (!empty($_SESSION['errors'])): ?>
+                <div class="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">
+                    <?php foreach ($_SESSION['errors'] as $error): ?>
+                        <p><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php endforeach; unset($_SESSION['errors']); ?>
+                </div>
+            <?php endif; ?>
 
             <div class="flex-1 space-y-3 mb-4">
                 <?php foreach ($messages as $msg): ?>
